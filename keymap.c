@@ -145,6 +145,7 @@ static struct Mapping KeyNames[] = {
 int LastKey; /**< contains the last key the user pressed */
 
 struct Keymap *Keymaps[MENU_MAX];
+struct KeymapList *NewKeymaps[MENU_MAX];
 
 /**
  * alloc_keys - Allocate space for a sequence of keys
@@ -156,7 +157,7 @@ static struct Keymap *alloc_keys(size_t len, keycode_t *keys)
 {
   struct Keymap *p = mutt_mem_calloc(1, sizeof(struct Keymap));
   p->len = len;
-  p->keys = mutt_mem_malloc(len * sizeof(keycode_t));
+  p->keys = mutt_mem_calloc(len, sizeof(keycode_t));
   memcpy(p->keys, keys, len * sizeof(keycode_t));
   return p;
 }
@@ -913,6 +914,7 @@ void init_extended_keys(void)
 void km_init(void)
 {
   memset(Keymaps, 0, sizeof(struct Keymap *) * MENU_MAX);
+  memset(NewKeymaps, 0, sizeof(struct KeymapList *) * MENU_MAX);
 
   create_bindings(OpAttach, MENU_ATTACH);
   create_bindings(OpBrowser, MENU_FOLDER);

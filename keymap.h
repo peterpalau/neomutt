@@ -47,14 +47,17 @@ void init_extended_keys(void);
  */
 struct Keymap
 {
-  char *macro;         /**< macro expansion (op == OP_MACRO) */
-  char *desc;          /**< description of a macro for the help menu */
-  struct Keymap *next; /**< next key in map */
-  short op;            /**< operation to perform */
-  short eq;            /**< number of leading keys equal to next entry */
-  short len;           /**< length of key sequence (unit: sizeof (keycode_t)) */
-  keycode_t *keys;     /**< key sequence */
+  char *macro;                  /**< macro expansion (op == OP_MACRO) */
+  char *desc;                   /**< description of a macro for the help menu */
+  struct Keymap *next;          /**< next key in map */
+  short op;                     /**< operation to perform */
+  short eq;                     /**< number of leading keys equal to next entry */
+  short len;                    /**< length of key sequence (unit: sizeof (keycode_t)) */
+  keycode_t *keys;              /**< key sequence */
+  STAILQ_ENTRY(Keymap) entries; /**< next key in map */
 };
+
+STAILQ_HEAD(KeymapList, Keymap);
 
 int km_expand_key(char *s, size_t len, struct Keymap *map);
 struct Keymap *km_find_func(int menu, int func);
